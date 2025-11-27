@@ -1,0 +1,41 @@
+namespace Shop
+{
+    interface IPrice { int GetPrice(); }
+    interface IWarrantyPeriod { int GetWarrantyPeriodInMonths(); }
+
+    class Phone : IPrice, IWarrantyPeriod
+    {
+        public int Price { get; set; }
+        public int WarrantyPeriodInMonths { get; set; }
+        public Phone(int price, int warrantyPeriod)
+        {
+            Price = price;
+            WarrantyPeriodInMonths = warrantyPeriod;
+        }
+        public int GetWarrantyPeriodInMonths() { return WarrantyPeriodInMonths; }
+        public int GetPrice() { return Price; }
+    }
+    class Laptop : IPrice
+    {
+        public int Price { get; set; }
+        public Laptop(int price)
+        {
+            Price = price;
+        }
+        public int GetPrice() { return Price; }
+    }
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Phone phone = new Phone(15000, 24);
+            Laptop laptop = new Laptop(30000);
+            IPrice laptopPrice = laptop;
+            IPrice phonePrice = phone;
+            IWarrantyPeriod phoneWarranty = phone;
+            Console.WriteLine($"Цена телефона: {phonePrice.GetPrice()}. Гарантия: {phoneWarranty.GetWarrantyPeriodInMonths()} месяца.");
+            Console.WriteLine($"Цена ноутбука: {laptopPrice.GetPrice()}.");
+
+        }
+    }
+}
