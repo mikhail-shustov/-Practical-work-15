@@ -1,0 +1,51 @@
+namespace Bank
+{
+    interface IDepositOrWithdraw { void Deposit(int sum); void Withdraw(int sum); }
+    interface ITransferToAnotherAccount { void Transfer(int sum, BankAccount accToTransfer); }
+
+    class BankAccount : IDepositOrWithdraw, ITransferToAnotherAccount
+    {
+        public decimal Balance { get; set; }
+
+        public void Deposit(int sum)
+        {
+            if (sum <= 0) { Console.WriteLine("Сумма должна быть не меньше 0!"); return; }
+            Balance += sum;
+        }
+        public void Withdraw(int sum)
+        {
+            if (sum <= 0) { Console.WriteLine("Сумма должна быть не меньше 0!"); return; }
+            if (sum <= Balance) Balance -= sum;
+            else Console.WriteLine("Недостаточно средств");
+        }
+        public void Transfer(int sum, BankAccount accToTransfer)
+        {
+            if (sum <= 0) { Console.WriteLine("Сумма должна быть не меньше 0!"); return; }
+            if (sum <= Balance)
+            {
+                Balance -= sum;
+                IDepositOrWithdraw Itrans = accToTransfer;
+                Itrans.Deposit(sum);
+            }
+            else Console.WriteLine("Недостаточно средств");
+        }
+    }
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            BankAccount kolya = new BankAccount();
+            IDepositOrWithdraw kolyaDep = kolya;
+            ITransferToAnotherAccount kolyaTrans = kolya;
+            kolyaDep.Deposit(8000);
+            BankAccount petya = new BankAccount();
+            IDepositOrWithdraw petyaDep = petya;
+            petyaDep.Deposit(4000);
+            kolyaTrans.Transfer(1500, petya);
+            petyaDep.Withdraw(1000);
+            Console.WriteLine("Баланс Коли: " + kolya.Balance);
+            Console.WriteLine("Баланс Пети: " + petya.Balance);
+
+            Console.ReadKey();
+        }
+    }
