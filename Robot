@@ -1,0 +1,50 @@
+namespace Robot
+{
+
+    interface IWork
+    {
+        void Work();
+    }
+
+    interface ICharge
+    {
+        void Charge();
+    }
+
+    class Robot : IWork, ICharge
+    {
+        public string Name { get; private set; }
+        public int Energy { get; private set; }
+
+        public Robot(string name, int energy)
+        {
+            Name = name;
+            Energy = energy;
+        }
+
+        public void Work()
+        {
+            Energy = Math.Max(Energy - 20, 0);
+            Console.WriteLine($"{Name} работает. Энергия: {Energy}");
+        }
+
+        public void Charge()
+        {
+            Energy = Math.Min(Energy + 50, 100);
+            Console.WriteLine($"{Name} заряжается. Энергия: {Energy}");
+        }
+    }
+
+    class Program
+    {
+        static void Main()
+        {
+            Robot robot = new Robot("Робот-1", 60);
+
+            robot.Work();
+            robot.Work();
+            robot.Charge();
+            robot.Work();
+        }
+    }
+}
