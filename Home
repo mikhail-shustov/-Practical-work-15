@@ -1,0 +1,52 @@
+namespace Home
+{
+    interface IEnable { void Enable(bool enable); }
+    interface ISetLevel { void SetLevel(int level); }
+
+    class Lamp : IEnable, ISetLevel
+    {
+        private int level = 0;
+        public int Level
+        {
+            get { return level; }
+            set
+            {
+                level = value;
+                if (value > 100) Level = 100;
+                else if (value < 0) Level = 0;
+            }
+        }
+        public void Enable(bool enable)
+        {
+            if (enable) { Level = 100; Console.WriteLine("Лампа включена. Мощность: " + Level); }
+            else { Level = 0; Console.WriteLine("Лампа выключена. Мощность: " + Level); }
+        }
+        public void SetLevel(int _level) { Level = _level; Console.WriteLine("Мощность лампы изменилась на " + Level); }
+    }
+    class Fan : IEnable
+    {
+        public bool Enabled { get; set; }
+        public void Enable(bool enable)
+        {
+            Enabled = enable;
+            if (Enabled) Console.WriteLine("Вентилятор включен");
+            else Console.WriteLine("Вентилятор выключен");
+        }
+    }
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Lamp lamp = new Lamp();
+            Fan fan = new Fan();
+            IEnable lampEnable = lamp;
+            IEnable fanEnable = fan;
+            lampEnable.Enable(true);
+            lampEnable.Enable(false);
+            fanEnable.Enable(true);
+            fanEnable.Enable(false);
+            ISetLevel lampLevel = lamp;
+            lampLevel.SetLevel(30);
+        }
+    }
+}
